@@ -18,15 +18,9 @@ class Team {
 }
 
 class GameScore with ChangeNotifier {
-  int limitScore = 200;
-  final Team team1;
-  final Team team2;
   List<RoundScore> roundScores = [];
 
   GameScore(
-    this.limitScore,
-    this.team1,
-    this.team2,
     this.roundScores,
   );
 

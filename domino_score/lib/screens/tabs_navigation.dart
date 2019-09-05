@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/scores.dart';
+import '../providers/settings.dart';
 import './settings_screen.dart';
 import './score_screen.dart';
 import './history_screen.dart';
@@ -56,7 +59,17 @@ class _TabsNavigationState extends State<TabsNavigation> {
         title: Text(_pages[_selectedTabIndex]["title"]),
         actions: _pages[_selectedTabIndex]["actions"],
       ),
-      body: _pages[_selectedTabIndex]["screen"],
+      body: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: Settings(limitScore: 200, isOnTeams: true),
+          ),
+          ChangeNotifierProvider.value(
+            value: GameScore([]),
+          ),
+        ],
+        child: _pages[_selectedTabIndex]["screen"],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         unselectedItemColor: Colors.black,
@@ -77,11 +90,13 @@ class _TabsNavigationState extends State<TabsNavigation> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        child: Icon(Icons.add),
-        onPressed: () {},
-      ),
+      floatingActionButton: _selectedTabIndex == 1
+          ? FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Icon(Icons.add),
+              onPressed: () {},
+            )
+          : null,
     );
   }
 }
