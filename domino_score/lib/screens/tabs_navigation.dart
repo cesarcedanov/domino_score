@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/scores.dart';
+import '../providers/team_game.dart';
 import '../providers/settings.dart';
 import './settings_screen.dart';
 import './score_screen.dart';
@@ -65,7 +65,7 @@ class _TabsNavigationState extends State<TabsNavigation> {
             value: Settings(limitScore: 200, isOnTeams: true),
           ),
           ChangeNotifierProvider.value(
-            value: GameScore([]),
+            value: TeamsGame(),
           ),
         ],
         child: _pages[_selectedTabIndex]["screen"],

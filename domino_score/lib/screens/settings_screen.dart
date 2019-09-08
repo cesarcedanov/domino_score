@@ -2,81 +2,191 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/settings.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
-  final player1Controller = TextEditingController();
-  final player2Controller = TextEditingController();
-  final player3Controller = TextEditingController();
-  final player4Controller = TextEditingController();
+
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  var gameSettings = Settings(isOnTeams: true, limitScore: 300);
 
   @override
   Widget build(BuildContext context) {
-    final settingData = Provider.of<Settings>(context);
+    // final gameSettings = Provider.of<Settings>(context);
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 10,
-          ),
-          Center(
-            child: Text(
-              'Game Settings',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: Text(
+                'Game Style',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                '1 vs 3',
-                style: TextStyle(color: Colors.grey),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Indivual',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Switch.adaptive(
+                  onChanged: (_) => gameSettings.toggleIsOnTeams(),
+                  value: gameSettings.isOnTeams,
+                ),
+                Text(
+                  'Teams',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Divider(
+              color: Colors.black87,
+              height: 10,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: Text(
+                'Insert Players Names',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              Switch.adaptive(
-                onChanged: (_) => settingData.toggleIsOnTeams(),
-                value: settingData.isOnTeams,
-              ),
-              Text(
-                '2 vs 2',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            height: 300,
-            child: Column(
+            ),
+            Column(
               children: <Widget>[
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Spacer(),
-                    Text('Player 1'),
-                    Spacer(),
+                    Container(
+                      width: 125,
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          alignLabelWithHint: true,
+                          hintText: 'Type in the name',
+                          labelText: 'Player 1 Name',
+                        ),
+                        onChanged: (value) {
+                          if (value != null) {
+                            gameSettings.setPlayer1Name(value);
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Player 2'),
-                    Spacer(),
-                    Text('Player 4'),
+                    Container(
+                      width: 125,
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          alignLabelWithHint: true,
+                          hintText: 'Type in the name',
+                          labelText: 'Player 2 Name',
+                        ),
+                        onChanged: (value) {
+                          if (value != null) {
+                            gameSettings.setPlayer2Name(value);
+                          }
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: 125,
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          alignLabelWithHint: true,
+                          hintText: 'Type in the name',
+                          labelText: 'Player 4 Name',
+                        ),
+                        onChanged: (value) {
+                          if (value != null) {
+                            gameSettings.setPlayer4Name(value);
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Spacer(),
-                    Text('Player 3'),
-                    Spacer(),
+                    Container(
+                      width: 125,
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          hintText: 'Type in the name',
+                          labelText: 'Player 3 Name',
+                        ),
+                        onChanged: (value) {
+                          if (value != null) {
+                            gameSettings.setPlayer3Name(value);
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ],
             ),
-          )
-        ],
+            SizedBox(
+              height: 20,
+            ),
+            Divider(
+              color: Colors.black87,
+              height: 10,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: Text(
+                'Limit Score',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            DropdownButton<int>(
+              value: gameSettings.limitScore,
+              onChanged: (int value) {
+                if (value != null) {
+                  gameSettings.setLimitScore(value);
+                }
+              },
+              items: <int>[100, 200, 250, 300, 500]
+                  .map<DropdownMenuItem<int>>((int value) {
+                return DropdownMenuItem<int>(
+                  value: value,
+                  child: Text('$value'),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
